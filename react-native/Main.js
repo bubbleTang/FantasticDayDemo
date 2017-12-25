@@ -18,6 +18,7 @@ const {width, height} = Dimensions.get('window');
 const RATIO_WIDTH = width / 375;
 
 import NavigationBar from './NavigationBar'
+import MainView from "./MainView";
 
 export default class Main extends Component {
   constructor(props) {
@@ -35,7 +36,9 @@ export default class Main extends Component {
         style={{flex: 1}}
         source={require('./images/FD.png')}
       >
+        <MainView
 
+        />
       </ImageBackground>
     )
   }
