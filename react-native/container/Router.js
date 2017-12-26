@@ -1,30 +1,13 @@
+
+import React ,{Component} from 'react';
+import { StackNavigator} from 'react-navigation';
+
+// 界面组件
+import Main from '../component/Main'
+
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
+ * 路由导航
  */
-
-import React, {Component} from 'react';
-import {
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-  Animated,
-  Easing
-} from 'react-native';
-
-import {StackNavigator} from 'react-navigation';
-import Main from './Main'
-
-export default class App extends Component<{}> {
-
-  render() {
-    return (
-      <Navigator />
-    );
-  }
-}
 
 const Navigator = StackNavigator(
   {
@@ -57,3 +40,5 @@ const Navigator = StackNavigator(
     // }),
   }
 );
+
+export default Navigator;

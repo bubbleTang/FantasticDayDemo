@@ -13,7 +13,7 @@ import {
   StyleSheet
 } from 'react-native';
 
-import globalStyles from './globalStyles'
+import globalStyles from '../css/globalStyles'
 
 const {width, height} = Dimensions.get('window');
 const RATIO_WIDTH = width / 375;
@@ -59,7 +59,7 @@ export default class MainView extends Component {
   render() {
     return (
       <View style={[globalStyles.main.noBarContainer]}>
-        {this._renderHeaderView()}
+        {this._renderHeaderView(5, 6)}
       </View>
     )
   }
