@@ -31,13 +31,15 @@ export default class Main extends Component {
   });
 
   render() {
+    console.log(this.props, '*********');
     return (
       <ImageBackground
         style={{flex: 1}}
         source={require('../images/FD.png')}
       >
         <MainView
-
+          onPress={() => {
+          }}
         />
       </ImageBackground>
     )

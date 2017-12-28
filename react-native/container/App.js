@@ -19,8 +19,8 @@ import {Provider, connect} from 'react-redux'
 import thunk from 'redux-thunk';
 import { createStore, applyMiddleware, compose } from 'redux';
 
-import Router from './Router'
-import navReducer from './NavReducer';
+import Navigator from './Navigator'
+import navReducer from '../reducer/navReducer';
 import rootReducer from './RootReducer';
 
 const middlewares = [thunk.withExtraArgument()];
@@ -34,7 +34,7 @@ let store = createStore(rootReducer(navReducer), {}, middleware);
 class AppWithNavigationState extends Component {
   render() {
     return (
-      <Router
+      <Navigator
         navigation={addNavigationHelpers({
           dispatch: this.props.dispatch,
           state: this.props.nav
