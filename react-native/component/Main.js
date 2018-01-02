@@ -47,6 +47,7 @@ class Main extends Component {
       >
         <MainView
           state={this.props.state}
+          onAddBtnPress={() => {}}
         />
       </ImageBackground>
     )

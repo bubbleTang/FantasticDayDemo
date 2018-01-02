@@ -7,16 +7,20 @@ import {
   Image,
   Platform,
   StatusBar,
+  ImageBackground,
   TouchableOpacity,
   InteractionManager,
   Dimensions,
+  ScrollView,
   StyleSheet
 } from 'react-native';
 
 import globalStyles from '../css/globalStyles'
+import ScheduleRow from "./ScheduleRow";
 
 const {width, height} = Dimensions.get('window');
 const RATIO_WIDTH = width / 375;
+const RATIO_HEIGHT = height / 667;
 const defaultParam = {
   title: '',
   time: '',
@@ -56,11 +60,56 @@ export default class MainView extends Component {
     )
   }
 
+  _renderBodyView(scheduleList) {
+    return (
+      <View style={styles.bodyView}>
+        <Text style={styles.bodyTitle}>
+          {'我的日程'}
+        </Text>
+        <ScrollView>
+          <View style={styles.bodyMain}>
+            {scheduleList.map((rowData, index) =>
+              <ScheduleRow
+                key={index}
+                rowData={rowData}
+                onPress={this._onRowPress.bind(this, rowData)}
+              />
+            )}
+          </View>
+        </ScrollView>
+      </View>
+    )
+  }
+
+  _onRowPress(rowData) {
+
+  }
+
+  _renderButtonView() {
+    return (
+      <View style={styles.buttonView}>
+        <ImageBackground
+          style={{height: 254 / 2, width: width, alignItems: 'center', justifyContent: 'center'}}
+          source={require('../images/FD_02.png')}
+        >
+          <TouchableOpacity
+            style={{padding: 10}}
+            onPress={this.props.onAddBtnPress}
+          >
+            <Image source={require('../images/add_button.png')}/>
+          </TouchableOpacity>
+        </ImageBackground>
+      </View>
+    )
+  }
+
   render() {
-    let {scheduleCnt, starCnt} = this.props.state.user;
+    let {scheduleCnt, starCnt, scheduleList} = this.props.state.user;
     return (
       <View style={[globalStyles.main.noBarContainer]}>
         {this._renderHeaderView(scheduleCnt, starCnt)}
+        {this._renderBodyView(scheduleList)}
+        {this._renderButtonView()}
       </View>
     )
   }
@@ -85,5 +134,28 @@ let styles = StyleSheet.create({
     marginTop: 10,
     color: '#ffffff',
     fontSize: 18,
+  },
+
+  bodyView: {
+    marginTop: 45 * RATIO_HEIGHT,
+    flex: 1,
+    width: 102 * RATIO_WIDTH * 3 + 30,
+    marginLeft: (width - 102 * RATIO_WIDTH * 3 - 20) / 2,
+  },
+  bodyTitle: {
+    fontSize: 20,
+    color: '#4f72b2'
+  },
+  bodyMain: {
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap'
+  },
+
+  buttonView: {
+    width: width,
+    position: 'absolute',
+    bottom: 0,
+    height: 254 / 2
   }
 });

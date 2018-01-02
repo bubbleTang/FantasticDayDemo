@@ -54,7 +54,7 @@ const initData = {
   scheduleList: [
     {
       title: '元旦',
-      timestamp: 1546272000,
+      timestamp: 1546272000000,
       category: initCategory[0],
       alert: false,
       top: false,
