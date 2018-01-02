@@ -1,3 +1,10 @@
-'use strict';
+import { combineReducers } from 'redux';
 
-module.exports.userReducer = require('./userReducer');
+import user from './user';
+
+export default function getReducers(navReducer) {
+  return combineReducers({
+    user,
+    nav: navReducer
+  });
+}

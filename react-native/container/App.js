@@ -4,37 +4,26 @@
  * @flow
  */
 
-import React, {Component} from 'react';
-import {
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-  Animated,
-  Easing
-} from 'react-native';
+import React, { Component } from "react";
+import { Provider, connect } from "react-redux";
+import { addNavigationHelpers } from "react-navigation";
 
-import {StackNavigator, addNavigationHelpers} from 'react-navigation';
-import {Provider, connect} from 'react-redux'
-import thunk from 'redux-thunk';
-import { createStore, applyMiddleware, compose } from 'redux';
+import getStore from "../store";
+import { AppNavigator } from './Navigator';
 
-import Navigator from './Navigator'
-import navReducer from '../reducer/navReducer';
-import rootReducer from './RootReducer';
+const navReducer = (state, action) => {
+  const newState = AppNavigator.router.getStateForAction(action, state);
+  return newState || state;
+};
 
-const middlewares = [thunk.withExtraArgument()];
-const middleware = applyMiddleware(...middlewares);
-let store = createStore(rootReducer(navReducer), {}, middleware);
-
-@connect(state => ({
+const mapStateToProps = (state) => ({
   nav: state.nav
-}))
+});
 
-class AppWithNavigationState extends Component {
+class App extends Component {
   render() {
     return (
-      <Navigator
+      <AppNavigator
         navigation={addNavigationHelpers({
           dispatch: this.props.dispatch,
           state: this.props.nav
@@ -44,12 +33,14 @@ class AppWithNavigationState extends Component {
   }
 }
 
-export default class App extends Component<{}> {
-  render() {
-    return (
-      <Provider store={store}>
-        <AppWithNavigationState />
-      </Provider>
-    );
-  }
+const AppWithNavigationState = connect(mapStateToProps)(App);
+
+const store = getStore(navReducer);
+
+export default function Root() {
+  return (
+    <Provider store={store}>
+      <AppWithNavigationState />
+    </Provider>
+  );
 }

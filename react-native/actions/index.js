@@ -1,3 +1,11 @@
 'use strict';
 
-module.exports.userReducer = require('./UserAction');
+let actions = {};
+let user = require('./userAction');
+
+Object.assign(
+  actions,
+  user
+);
+
+module.exports = actions;

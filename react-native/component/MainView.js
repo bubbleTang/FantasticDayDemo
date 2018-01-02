@@ -35,17 +35,14 @@ export default class MainView extends Component {
   _renderHeaderView(dayCnt = 0, pinnedDayCnt = 0) {
     return (
       <View style={styles.header}>
-        <TouchableOpacity
-          style={{alignItems: 'center', justifyContent: 'center'}}
-          onPress={this.props.onPress}
-        >
-          <Text style={styles.headerTitle}>
+        <View style={{alignItems: 'center', justifyContent: 'center'}}>
+          <Text style={styles.headerTitle} onPress={this.props.onPress}>
             {'我的日程'}
           </Text>
           <Text style={styles.headerDay}>
             {dayCnt}
           </Text>
-        </TouchableOpacity>
+        </View>
 
         <View style={{alignItems: 'center', justifyContent: 'center'}}>
           <Text style={styles.headerTitle}>

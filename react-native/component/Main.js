@@ -20,7 +20,11 @@ const RATIO_WIDTH = width / 375;
 import NavigationBar from './navigator/NavigationBar'
 import MainView from "./MainView";
 
-export default class Main extends Component {
+import {connect} from "react-redux";
+import {bindActionCreators} from "redux";
+import actions from '../actions';
+
+class Main extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -31,15 +35,14 @@ export default class Main extends Component {
   });
 
   render() {
-    console.log(this.props, '*********');
+    console.log(this.props.state.user, '88888888');
     return (
       <ImageBackground
         style={{flex: 1}}
         source={require('../images/FD.png')}
       >
         <MainView
-          onPress={() => {
-          }}
+          onPress={() => this.props.actions.fetchText(true)}
         />
       </ImageBackground>
     )
@@ -51,3 +54,8 @@ Main.propType = {};
 Main.defaultProps = {};
 
 let styles = StyleSheet.create({});
+
+export default connect(
+  state => ({state: state}),
+  dispatch => ({actions: bindActionCreators(actions, dispatch)})
+)(Main);
