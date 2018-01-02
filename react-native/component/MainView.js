@@ -57,9 +57,10 @@ export default class MainView extends Component {
   }
 
   render() {
+    let {scheduleCnt, starCnt} = this.props.state.user;
     return (
       <View style={[globalStyles.main.noBarContainer]}>
-        {this._renderHeaderView(5, 6)}
+        {this._renderHeaderView(scheduleCnt, starCnt)}
       </View>
     )
   }

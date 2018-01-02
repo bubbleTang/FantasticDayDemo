@@ -30,19 +30,23 @@ class Main extends Component {
     this.state = {};
   }
 
+  componentWillMount() {
+    this.props.actions.initLocalData();
+    this.props.actions.initCategoryData()
+  }
+
   static navigationOptions = ({navigation}) => ({
     header: <NavigationBar title="Fantastic Days"/>
   });
 
   render() {
-    console.log(this.props.state.user, '88888888');
     return (
       <ImageBackground
         style={{flex: 1}}
         source={require('../images/FD.png')}
       >
         <MainView
-          onPress={() => this.props.actions.fetchText(true)}
+          state={this.props.state}
         />
       </ImageBackground>
     )

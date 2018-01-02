@@ -1,15 +1,32 @@
 'use strict';
 
-import {handleActions} from 'redux-actions';
+module.exports = function (state, action) {
 
-const defaultState = {
-  visible: false
-};
+  state = state || {
+      type: 'INIT',
+      scheduleCnt: 0,
+      starCnt: 0,
+      scheduleList: [],
 
-export default handleActions({
-  'login': (state, action) => ({
+      categoryList: []
+    };
+
+  switch (action.type) {
+    case 'INIT_LOCAL_DATA':
+      return Object.assign({}, state, {
+        scheduleCnt: action.scheduleCnt,
+        starCnt: action.starCnt,
+        scheduleList: action.scheduleList
+      });
+
+    case 'INIT_CATEGORY':
+      return Object.assign({}, state, {
+        categoryList: action.categoryList
+      });
+  }
+
+  return {
     ...state,
-    visible: true
-  }),
-
-}, defaultState);
+    ...{type: action.type}
+  }
+};
