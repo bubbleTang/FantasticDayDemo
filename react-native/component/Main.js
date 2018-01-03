@@ -36,7 +36,10 @@ class Main extends Component {
   }
 
   static navigationOptions = ({navigation}) => ({
-    header: <NavigationBar title="Fantastic Days"/>
+    header: <NavigationBar
+      title="Fantastic Days"
+      navigation={navigation}
+    />
   });
 
   render() {
@@ -47,7 +50,9 @@ class Main extends Component {
       >
         <MainView
           state={this.props.state}
-          onAddBtnPress={() => {}}
+          onAddBtnPress={() => {
+            this.props.navigation.navigate('AddPage')
+          }}
         />
       </ImageBackground>
     )
