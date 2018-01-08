@@ -28,7 +28,7 @@ export default class ScheduleRow extends Component {
 
     let nowDate = new Date();
     let rowDataTime = new Date(timestamp);
-    let day = Math.floor((rowDataTime.getTime() - nowDate.getTime()) / (24 * 3600 * 1000));
+    let day = Math.floor((rowDataTime.getTime() - nowDate.getTime()) / (24 * 3600 * 1000)) + 1;
     let dateDesp = day < 0 ? '过去了' : '还有';
 
     return (
@@ -36,6 +36,7 @@ export default class ScheduleRow extends Component {
         activeOpacity={0.8}
         style={styles.container}
         onPress={onPress}
+        onLongPress={() => this.props.onLongPress(rowData.id)}
       >
         <Text style={styles.title} numberOfLines={2}>
           {rowData.title}

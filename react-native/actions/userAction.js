@@ -1,6 +1,7 @@
 'use strict';
 
 import userStorage from '../proxy/userStorage'
+import {Alert} from 'react-native'
 
 const categoryIconList = [
   require('../images/bat.png'),
@@ -53,6 +54,7 @@ const initData = {
   starCnt: 1,
   scheduleList: [
     {
+      id: 1,
       title: '元旦',
       timestamp: 1546272000000,
       category: initCategory[0],
@@ -114,6 +116,8 @@ let initCategoryData = () => {
 let add = (param) => {
   return (dispatch, getState) => {
     let {scheduleCnt, starCnt, scheduleList} = getState().user;
+    let id = Date.parse(new Date());
+    param['id'] = id;
 
     scheduleList.push(param);
     scheduleCnt++;
@@ -154,8 +158,94 @@ let add = (param) => {
   }
 };
 
+let update = (id, param) => {
+  return (dispatch, getState) => {
+    let {scheduleCnt, starCnt, scheduleList} = getState().user;
+    scheduleList.map((data, index) => {
+      if (data.id === id) {
+        if (data.top !== param.top) {
+          if (param.top) {
+            starCnt++
+          } else {
+            starCnt--
+          }
+        }
+        scheduleList.splice(index, 1, param);
+      }
+
+      let topList = [];
+      let normalList = [];
+
+      scheduleList.map((data, index) => {
+        if (data.top) {
+          topList.push(data)
+        } else {
+          normalList.push(data)
+        }
+      });
+
+      topList = topList.sort((a, b) => {
+        return a.timestamp - b.timestamp
+      });
+      normalList = normalList.sort((a, b) => {
+        return a.timestamp - b.timestamp
+      });
+
+      topList = topList.concat(normalList);
+
+      let storageData = {
+        scheduleCnt: scheduleCnt,
+        starCnt: starCnt,
+        scheduleList: topList
+      };
+      userStorage.storage.setData(storageData);
+      dispatch({
+        type: 'ADD',
+        scheduleCnt: scheduleCnt,
+        starCnt: starCnt,
+        scheduleList: topList
+      });
+    })
+  }
+};
+
+let deleteData = (id) => {
+  return (dispatch, getState) => {
+    if (id === 1) {
+      alert('不可删除');
+      return
+    } else {
+      let {scheduleCnt, starCnt, scheduleList} = getState().user;
+      scheduleCnt--;
+      scheduleList.map((data, index) => {
+        if (data.id === id) {
+          if (data.top === true) starCnt--;
+          scheduleList.splice(index, 1);
+        }
+      });
+
+      let storageData = {
+        scheduleCnt: scheduleCnt,
+        starCnt: starCnt,
+        scheduleList: scheduleList
+      };
+      userStorage.storage.setData(storageData);
+
+      dispatch({
+        type: 'ADD',
+        scheduleCnt: scheduleCnt,
+        starCnt: starCnt,
+        scheduleList: scheduleList
+      });
+    }
+  }
+};
+
 module.exports = {
   initLocalData,
   initCategoryData,
-  add
+  add,
+
+  update,
+  deleteData
 };

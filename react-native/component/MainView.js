@@ -73,6 +73,7 @@ export default class MainView extends Component {
                 key={index}
                 rowData={rowData}
                 onPress={this._onRowPress.bind(this, rowData)}
+                onLongPress={this.props.onLongPress}
               />
             )}
           </View>
@@ -82,7 +83,7 @@ export default class MainView extends Component {
   }
 
   _onRowPress(rowData) {
-
+    this.props.onRowPress(rowData)
   }
 
   _renderButtonView() {

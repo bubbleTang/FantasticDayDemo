@@ -57,6 +57,21 @@ class AddPage extends Component {
     this.props.navigation.setParams({clickParams: this._onNavRightBtnPress.bind(this)})
   }
 
+  componentDidMount() {
+    let {params} = this.props.navigation.state;
+    if (params && params.rowData) {
+      this.setState({
+        title: params.rowData.title,
+        date: this.getDateText(new Date(params.rowData.timestamp)),
+        categoryData: params.rowData.category,
+        categoryId: params.rowData.category.id,
+        alert: params.rowData.alert,
+        top: params.rowData.top,
+        remark: params.rowData.remark
+      })
+    }
+  }
+
   componentWillUnmount() {
     this.timer && clearTimeout(this.timer);
     this.listener && this.listener.remove()
@@ -95,7 +110,13 @@ class AddPage extends Component {
       remark: this.state.remark
     };
 
-    this.props.actions.add(param);
+    let {params} = this.props.navigation.state;
+
+    if (params && params.rowData) {
+      this.props.actions.update(params.rowData.id, param);
+    } else {
+      this.props.actions.add(param);
+    }
     this.props.navigation.goBack();
   }
 

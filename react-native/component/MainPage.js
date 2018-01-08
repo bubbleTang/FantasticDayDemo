@@ -11,6 +11,7 @@ import {
   InteractionManager,
   Dimensions,
   StyleSheet,
+  Alert,
   ImageBackground
 } from 'react-native';
 
@@ -52,6 +53,19 @@ class Main extends Component {
           state={this.props.state}
           onAddBtnPress={() => {
             this.props.navigation.navigate('AddPage')
+          }}
+          onRowPress={(rowData) => {
+            this.props.navigation.navigate('AddPage', {rowData: rowData})
+          }}
+          onLongPress={(id) => {
+            Alert.alert(
+              '确认删除？',
+              '',
+              [
+                {text: '取消', onPress: () => {}},
+                {text: '确定', onPress: () => this.props.actions.deleteData(id)}
+              ]
+            )
           }}
         />
       </ImageBackground>
