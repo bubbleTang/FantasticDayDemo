@@ -11,6 +11,10 @@ storage.initData = (initData) => {
   return Storage.setItem('data', initData);
 };
 
+storage.setData = (storageData) => {
+  return Storage.setItem('data', storageData);
+};
+
 storage.initCategoryData = (initCategory) => {
   return Storage.setItem('category', initCategory);
 };

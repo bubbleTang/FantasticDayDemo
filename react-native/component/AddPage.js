@@ -13,23 +13,30 @@ import ReactNative, {
   StyleSheet,
   TextInput,
   Switch,
+  Alert,
   Keyboard,
   ScrollView
 } from 'react-native';
 
 import NavigationBar from './navigator/NavigationBar'
 import globalStyles from '../css/globalStyles'
+import DatePickerMode from './DatePickerMode'
+
+import {connect} from "react-redux";
+import {bindActionCreators} from "redux";
+import actions from '../actions';
 
 const {width, height} = Dimensions.get('window');
 const RATIO_WIDTH = width / 375;
 
-export default class AddPage extends Component {
+class AddPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
       title: '',
       date: '',
-      category: '',
+      categoryData: null,
+      categoryId: null,
       alert: false,
       top: false,
       remark: ''
@@ -46,6 +53,8 @@ export default class AddPage extends Component {
         this.textInputScrollView.scrollTo({x: 0, y: 0, animated: true})
       })
     }
+
+    this.props.navigation.setParams({clickParams: this._onNavRightBtnPress.bind(this)})
   }
 
   componentWillUnmount() {
@@ -60,10 +69,35 @@ export default class AddPage extends Component {
       title="Fantastic Days"
       navigation={navigation}
       rightText="保存"
-      onRightItemPress={() => {
-      }}
+      onRightItemPress={() => navigation.state.params.clickParams()}
     />
   });
+
+  _onNavRightBtnPress() {
+    Keyboard.dismiss();
+
+    if (!this.state.title ||
+      !this.state.date ||
+      !this.state.categoryData) {
+      Alert.alert(
+        '提示',
+        '信息不全'
+      );
+      return
+    }
+
+    let param = {
+      title: this.state.title,
+      timestamp: new Date(this.state.date.replace(/-/g, '/')),
+      category: this.state.categoryData,
+      alert: this.state.alert,
+      top: this.state.top,
+      remark: this.state.remark
+    };
+
+    this.props.actions.add(param);
+    this.props.navigation.goBack();
+  }
 
   _renderTitle() {
     return (
@@ -94,8 +128,7 @@ export default class AddPage extends Component {
         </Text>
         <TouchableOpacity
           style={{paddingLeft: 20,}}
-          onPress={() => {
-          }}
+          onPress={this._onDatePickerBtnPress.bind(this)}
         >
           <Text style={styles.contentText}>
             {this.state.date || '请选择'}
@@ -103,6 +136,22 @@ export default class AddPage extends Component {
         </TouchableOpacity>
       </View>
     )
+  }
+
+  _onDatePickerBtnPress() {
+    this.datePickerMode && this.datePickerMode.show((date) => {
+      if (date) {
+        this.setState({date: this.getDateText(date)});
+      }
+    }, null)
+  }
+
+  // 日期转换
+  getDateText(date) {
+    let year = date.getFullYear() + '-';
+    let month = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+    let day = (date.getDate() < 10 ? '0' + (date.getDate()) : date.getDate());
+    return year + month + day
   }
 
   _renderCategory() {
@@ -114,10 +163,16 @@ export default class AddPage extends Component {
         <TouchableOpacity
           style={{paddingLeft: 20,}}
           onPress={() => {
+            this.props.navigation.navigate('CategoryPage', {
+              categoryId: this.state.categoryId,
+              callback: (categoryId, categoryData) => {
+                this.setState({categoryData: categoryData, categoryId: categoryId})
+              }
+            })
           }}
         >
           <Text style={styles.contentText}>
-            {this.state.category || '请选择'}
+            {this.state.categoryData ? this.state.categoryData.category : '请选择'}
           </Text>
         </TouchableOpacity>
       </View>
@@ -207,6 +262,9 @@ export default class AddPage extends Component {
           {this._renderTop()}
           {this._renderRemark()}
         </ScrollView>
+
+        <DatePickerMode ref={(view) => this.datePickerMode = view}/>
+
       </View>
     )
   }
@@ -247,3 +305,8 @@ let styles = StyleSheet.create({
     color: '#051a40'
   }
 });
+
+export default connect(
+  state => ({state: state}),
+  dispatch => ({actions: bindActionCreators(actions, dispatch)})
+)(AddPage);

@@ -47,7 +47,7 @@ export default class ScheduleRow extends Component {
           { (day < 0 ? -day : day) + '天'}
         </Text>
 
-        {rowData.star ? <Image
+        {rowData.top ? <Image
           style={{position: 'absolute', right: 0, bottom: 0}}
           source={require('../images/top.png')}/> : null }
       </TouchableOpacity>

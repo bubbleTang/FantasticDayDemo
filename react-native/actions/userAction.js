@@ -32,17 +32,17 @@ const initCategory = [
     icon: categoryIconList[0]
   },
   {
-    id: 1,
+    id: 2,
     category: '亲情',
     icon: categoryIconList[1]
   },
   {
-    id: 1,
+    id: 3,
     category: '娱乐',
     icon: categoryIconList[2]
   },
   {
-    id: 1,
+    id: 4,
     category: '校园生活',
     icon: categoryIconList[3]
   },
@@ -57,8 +57,7 @@ const initData = {
       timestamp: 1546272000000,
       category: initCategory[0],
       alert: false,
-      top: false,
-      star: true,
+      top: true,
       remark: ''
     }
   ]
@@ -77,7 +76,6 @@ let initLocalData = () => {
           })
         } else {
           userStorage.storage.initData(initData);
-          // userStorage.storage.initCategoryData(initCategory);
           dispatch({
             type: 'INIT_LOCAL_DATA',
             scheduleCnt: initData.scheduleCnt,
@@ -113,7 +111,51 @@ let initCategoryData = () => {
   }
 };
 
+let add = (param) => {
+  return (dispatch, getState) => {
+    let {scheduleCnt, starCnt, scheduleList} = getState().user;
+
+    scheduleList.push(param);
+    scheduleCnt++;
+    if (param.top) starCnt++;
+
+    let topList = [];
+    let normalList = [];
+
+    scheduleList.map((data, index) => {
+      if (data.top) {
+        topList.push(data)
+      } else {
+        normalList.push(data)
+      }
+    });
+
+    topList = topList.sort((a, b) => {
+      return a.timestamp - b.timestamp
+    });
+    normalList = normalList.sort((a, b) => {
+      return a.timestamp - b.timestamp
+    });
+
+    topList = topList.concat(normalList);
+
+    let storageData = {
+      scheduleCnt: scheduleCnt,
+      starCnt: starCnt,
+      scheduleList: topList
+    };
+    userStorage.storage.setData(storageData);
+    dispatch({
+      type: 'ADD',
+      scheduleCnt: scheduleCnt,
+      starCnt: starCnt,
+      scheduleList: topList
+    });
+  }
+};
+
 module.exports = {
   initLocalData,
-  initCategoryData
+  initCategoryData,
+  add
 };

@@ -23,6 +23,13 @@ module.exports = function (state, action) {
       return Object.assign({}, state, {
         categoryList: action.categoryList
       });
+
+    case 'ADD':
+      return Object.assign({}, state, {
+        scheduleCnt: action.scheduleCnt,
+        starCnt: action.starCnt,
+        scheduleList: action.scheduleList
+      });
   }
 
   return {
