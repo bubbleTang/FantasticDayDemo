@@ -20,15 +20,7 @@ import ScheduleRow from "./ScheduleRow";
 
 const {width, height} = Dimensions.get('window');
 const RATIO_WIDTH = width / 375;
-const RATIO_HEIGHT = height / 667;
-const defaultParam = {
-  title: '',
-  time: '',
-  category: '',
-  alert: false,
-  pinned: false,
-  comment: ''
-};
+const RATIO_HEIGHT = Platform.OS === 'ios' ? height / 667 : (height - StatusBar.currentHeight) / 667;
 
 export default class MainView extends Component {
   constructor(props) {
@@ -90,7 +82,7 @@ export default class MainView extends Component {
     return (
       <View style={styles.buttonView}>
         <ImageBackground
-          style={{height: 254 / 2, width: width, alignItems: 'center', justifyContent: 'center'}}
+          style={{height: 254 / 2 * RATIO_HEIGHT, width: width, alignItems: 'center', justifyContent: 'center'}}
           source={require('../images/FD_02.png')}
         >
           <TouchableOpacity
