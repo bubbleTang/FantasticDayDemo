@@ -23,4 +23,8 @@ storage.getCategoryData = () => {
   return Storage.getItem('category');
 };
 
+storage.setCategoryData = (categoryList) => {
+  return Storage.setItem('category', categoryList);
+};
+
 exports.storage = storage;

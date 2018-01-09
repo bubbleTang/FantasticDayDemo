@@ -85,6 +85,7 @@ class CategoryPage extends Component {
       <TouchableOpacity
         style={styles.addBtn}
         onPress={() => {
+          this.props.navigation.navigate('CreateCategoryPage')
         }}
       >
         <Text style={{color: 'white'}}>

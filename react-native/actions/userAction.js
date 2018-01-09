@@ -241,11 +241,24 @@ let deleteData = (id) => {
   }
 };
 
+let createCategory = (param) => {
+  return (dispatch, getState) => {
+    let icon_id = parseInt(Math.random() * (20 - 1 + 1) + 1);
+    param['icon'] = categoryIconList[icon_id] || categoryIconList[10];
+    let {categoryList} = getState().user;
+    categoryList.push(param);
+    userStorage.storage.setCategoryData(categoryList);
+    dispatch({type: 'INIT_CATEGORY', categoryList: categoryList})
+  }
+};
+
 module.exports = {
   initLocalData,
   initCategoryData,
   add,
 
   update,
-  deleteData
+  deleteData,
+
+  createCategory
 };
